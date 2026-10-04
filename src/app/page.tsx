@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import { Logo } from "@/components/ui/Logo";
 
 const steps = [
@@ -31,12 +33,12 @@ export default function LandingPage() {
             <a href="#plans" className="transition hover:text-bark">Plans</a>
             <a href="#why-fresh" className="transition hover:text-bark">Why fresh</a>
           </nav>
-          <a
-            href="#get-started"
+          <Link
+            href="/app/login"
             className="rounded-xl bg-paw-orange px-4 py-2.5 text-sm font-bold text-white shadow-soft transition hover:bg-paw-orange-dark"
           >
             Get Early Access
-          </a>
+          </Link>
         </div>
       </header>
 
