@@ -172,3 +172,74 @@ export const ADMIN_DRIVERS = [
   { name: "Suresh Pillai", vehicle: "TN 37 CD 7788 · Bike", stopsToday: 2, onTimePct: 94, phone: "+91 98222 33445" },
   { name: "Lakshmi N.", vehicle: "TN 37 EF 9012 · Scooter", stopsToday: 2, onTimePct: 100, phone: "+91 98333 44556" },
 ];
+
+export const DRIVER_PROFILE = {
+  name: "Vikram S.",
+  phone: "+91 98111 22334",
+  vehicle: "TN 37 AB 4521",
+  vehicleType: "Scooter",
+  rating: 4.9,
+  deliveriesCompleted: 842,
+  joinedMonthsAgo: 11,
+};
+
+export const DRIVER_EARNINGS = {
+  todayEarnings: 420,
+  todayDeliveries: 6,
+  weekEarnings: 2850,
+  weekDeliveries: 38,
+  perDelivery: 60,
+  incentive: 150,
+  breakdown: [
+    { label: "Delivery payouts", amount: 2700 },
+    { label: "On-time bonus", amount: 150 },
+  ],
+  last7DaysEarnings: [380, 410, 395, 440, 420, 455, 420],
+};
+
+export type PastDelivery = {
+  date: string;
+  clientName: string;
+  petName: string;
+  earnings: number;
+};
+
+export const DRIVER_HISTORY: PastDelivery[] = [
+  { date: "Today", clientName: "Rahul Desai", petName: "Tommy", earnings: 60 },
+  { date: "Today", clientName: "Anita George", petName: "Bella", earnings: 60 },
+  { date: "Yesterday", clientName: "Meera Krishnan", petName: "Bruno", earnings: 60 },
+  { date: "Yesterday", clientName: "Karthik Iyer", petName: "Max", earnings: 60 },
+  { date: "Yesterday", clientName: "Divya Shankar", petName: "Coco", earnings: 60 },
+  { date: "2 days ago", clientName: "Priya Menon", petName: "Daisy", earnings: 60 },
+  { date: "2 days ago", clientName: "Sanjana Rao", petName: "Luna", earnings: 60 },
+];
+
+export const SUPPLIER_PROFILE = {
+  businessName: "Coimbatore Fresh Farms",
+  contactName: "Ganesh Murthy",
+  phone: "+91 90000 44556",
+  gstin: "33AAFCC1234D1Z6",
+  bankAccount: "HDFC •••• 7721",
+  itemsSupplied: ["Chicken mince", "Mixed vegetables", "Rice"],
+};
+
+export type SupplierInvoice = {
+  id: string;
+  poId: string;
+  amount: number;
+  status: "paid" | "pending";
+  date: string;
+};
+
+export const SUPPLIER_INVOICES: SupplierInvoice[] = [
+  { id: "INV-514", poId: "PO-2037", amount: 4800, status: "pending", date: "Yesterday" },
+  { id: "INV-510", poId: "PO-2033", amount: 6400, status: "paid", date: "3 days ago" },
+  { id: "INV-507", poId: "PO-2030", amount: 3150, status: "paid", date: "4 days ago" },
+  { id: "INV-501", poId: "PO-2019", amount: 6400, status: "paid", date: "1 week ago" },
+];
+
+export const SUPPLIER_CATALOG = [
+  { itemName: "Chicken mince", ratePerKg: 220, unit: "kg", leadTimeDays: 1 },
+  { itemName: "Mixed vegetables", ratePerKg: 70, unit: "kg", leadTimeDays: 1 },
+  { itemName: "Rice (raw)", ratePerKg: 55, unit: "kg", leadTimeDays: 2 },
+];

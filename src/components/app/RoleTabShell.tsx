@@ -3,15 +3,18 @@
 import { useRouter } from "next/navigation";
 import type { ReactNode } from "react";
 
+import { TabBar, type TabConfig } from "./TabBar";
 import { useAppState } from "./state";
 
-export function RoleScreen({
+export function RoleTabShell({
   title,
   subtitle,
+  tabs,
   children,
 }: {
   title: string;
   subtitle?: string;
+  tabs: TabConfig[];
   children: ReactNode;
 }) {
   const router = useRouter();
@@ -23,7 +26,7 @@ export function RoleScreen({
   };
 
   return (
-    <div className="flex h-full flex-col">
+    <div className="relative flex h-full flex-col">
       <div className="flex items-center justify-between border-b border-black/5 px-6 py-4">
         <div>
           <h1 className="font-display text-xl text-bark">{title}</h1>
@@ -36,7 +39,8 @@ export function RoleScreen({
           Sign out
         </button>
       </div>
-      <div className="no-scrollbar flex-1 overflow-y-auto px-6 py-5">{children}</div>
+      <div className="no-scrollbar flex-1 overflow-y-auto px-6 py-5 pb-24">{children}</div>
+      <TabBar tabs={tabs} />
     </div>
   );
 }

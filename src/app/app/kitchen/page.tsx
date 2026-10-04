@@ -1,9 +1,8 @@
 "use client";
 
-import { useMemo, useState } from "react";
-
-import { RoleScreen } from "@/components/app/RoleScreen";
+import { RoleTabShell } from "@/components/app/RoleTabShell";
 import { StatusPill } from "@/components/app/StatusPill";
+import { KITCHEN_TABS } from "@/components/app/role-tabs";
 import type { FulfillmentStatus } from "@/components/app/constants";
 import { KITCHEN_TICKETS, type KitchenTicket } from "@/components/app/demo-data";
 
@@ -42,42 +41,12 @@ function TicketCard({ ticket }: { ticket: KitchenTicket }) {
   );
 }
 
-export default function KitchenDashboard() {
-  const [tickets] = useState(KITCHEN_TICKETS);
-
-  const batch = useMemo(() => {
-    const active = tickets.filter((t) => t.status === "PENDING" || t.status === "PREPPING");
-    return {
-      chicken: active.reduce((sum, t) => sum + t.chickenG, 0) / 1000,
-      veggie: active.reduce((sum, t) => sum + t.veggieG, 0) / 1000,
-      rice: active.reduce((sum, t) => sum + t.riceG, 0) / 1000,
-      orders: active.length,
-    };
-  }, [tickets]);
-
+export default function KitchenBoardScreen() {
   return (
-    <RoleScreen title="Kitchen" subtitle="Today's production board">
+    <RoleTabShell title="Kitchen board" subtitle="Today's production" tabs={KITCHEN_TABS}>
       <div className="flex flex-col gap-5">
-        <div className="grid grid-cols-3 gap-2 rounded-2xl bg-paw-green p-4 text-white shadow-soft">
-          <div>
-            <p className="text-[10px] uppercase tracking-wide text-paw-green-light">Chicken</p>
-            <p className="font-display text-lg">{batch.chicken.toFixed(1)}kg</p>
-          </div>
-          <div>
-            <p className="text-[10px] uppercase tracking-wide text-paw-green-light">Veggies</p>
-            <p className="font-display text-lg">{batch.veggie.toFixed(1)}kg</p>
-          </div>
-          <div>
-            <p className="text-[10px] uppercase tracking-wide text-paw-green-light">Rice</p>
-            <p className="font-display text-lg">{batch.rice.toFixed(1)}kg</p>
-          </div>
-          <p className="col-span-3 text-[11px] text-paw-green-light">
-            Needed across {batch.orders} open orders today
-          </p>
-        </div>
-
         {COLUMNS.map((column) => {
-          const columnTickets = tickets.filter((t) => t.status === column.status);
+          const columnTickets = KITCHEN_TICKETS.filter((t) => t.status === column.status);
           return (
             <div key={column.status} className="flex flex-col gap-2">
               <div className="flex items-center justify-between">
@@ -95,6 +64,6 @@ export default function KitchenDashboard() {
           );
         })}
       </div>
-    </RoleScreen>
+    </RoleTabShell>
   );
 }

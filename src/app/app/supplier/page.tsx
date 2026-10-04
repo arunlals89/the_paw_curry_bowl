@@ -3,7 +3,8 @@
 import { useState } from "react";
 
 import { Button } from "@/components/app/Button";
-import { RoleScreen } from "@/components/app/RoleScreen";
+import { RoleTabShell } from "@/components/app/RoleTabShell";
+import { SUPPLIER_TABS } from "@/components/app/role-tabs";
 import { PURCHASE_ORDERS, type PurchaseOrder } from "@/components/app/demo-data";
 
 const STATUS_COPY: Record<PurchaseOrder["status"], { label: string; className: string }> = {
@@ -25,7 +26,7 @@ export default function SupplierDashboard() {
   };
 
   return (
-    <RoleScreen title="Purchase orders" subtitle="Assigned to your account">
+    <RoleTabShell title="Purchase orders" subtitle="Assigned to your account" tabs={SUPPLIER_TABS}>
       <div className="flex flex-col gap-3">
         {toast ? (
           <div className="rounded-xl bg-paw-green-light px-4 py-2.5 text-sm font-semibold text-paw-green-dark">
@@ -55,6 +56,6 @@ export default function SupplierDashboard() {
           );
         })}
       </div>
-    </RoleScreen>
+    </RoleTabShell>
   );
 }

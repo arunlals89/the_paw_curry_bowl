@@ -3,8 +3,9 @@
 import { useState } from "react";
 
 import { Button } from "@/components/app/Button";
-import { RoleScreen } from "@/components/app/RoleScreen";
+import { RoleTabShell } from "@/components/app/RoleTabShell";
 import { StatusPill } from "@/components/app/StatusPill";
+import { DRIVER_TABS } from "@/components/app/role-tabs";
 import { DRIVER_STOPS } from "@/components/app/demo-data";
 import type { FulfillmentStatus } from "@/components/app/constants";
 
@@ -29,7 +30,7 @@ export default function DriverDashboard() {
   const remaining = stops.filter((s) => s.status !== "DELIVERED").length;
 
   return (
-    <RoleScreen title="Today's route" subtitle={`${remaining} stops remaining`}>
+    <RoleTabShell title="Today's route" subtitle={`${remaining} stops remaining`} tabs={DRIVER_TABS}>
       <div className="flex flex-col gap-3">
         {stops.map((stop) => (
           <div key={stop.id} className="flex flex-col gap-2 rounded-2xl bg-white p-4 shadow-soft">
@@ -60,6 +61,6 @@ export default function DriverDashboard() {
           </div>
         ))}
       </div>
-    </RoleScreen>
+    </RoleTabShell>
   );
 }

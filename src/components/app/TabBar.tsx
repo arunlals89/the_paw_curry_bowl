@@ -2,23 +2,20 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import type { ComponentType } from "react";
 
-import { BoxIcon, GridIcon, ListIcon, TruckIcon, UserIcon } from "./icons";
+export type TabConfig = {
+  href: string;
+  label: string;
+  Icon: ComponentType<{ size?: number; className?: string }>;
+};
 
-const TABS = [
-  { href: "/app/admin", label: "Overview", Icon: GridIcon },
-  { href: "/app/admin/orders", label: "Orders", Icon: ListIcon },
-  { href: "/app/admin/clients", label: "Clients", Icon: UserIcon },
-  { href: "/app/admin/fleet", label: "Fleet", Icon: TruckIcon },
-  { href: "/app/admin/stock", label: "Stock", Icon: BoxIcon },
-];
-
-export function AdminTabBar() {
+export function TabBar({ tabs }: { tabs: TabConfig[] }) {
   const pathname = usePathname();
 
   return (
     <nav className="absolute inset-x-0 bottom-0 z-20 flex items-stretch justify-around border-t border-black/5 bg-white/95 pb-7 pt-2 backdrop-blur">
-      {TABS.map(({ href, label, Icon }) => {
+      {tabs.map(({ href, label, Icon }) => {
         const active = pathname === href;
         return (
           <Link
