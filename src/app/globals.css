@@ -1,26 +1,76 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #fbf7f1;
+  --foreground: #2b211a;
+
+  --color-cream: #fbf7f1;
+  --color-cream-dark: #f2e9db;
+  --color-bark: #2b211a;
+  --color-bark-soft: #5c4b3f;
+
+  --color-paw-orange: #e2772e;
+  --color-paw-orange-dark: #c4601e;
+  --color-paw-orange-light: #fbe3cd;
+
+  --color-paw-green: #2f4f3f;
+  --color-paw-green-dark: #203a2e;
+  --color-paw-green-light: #e4ede3;
+
+  --color-paw-red: #c2452f;
+  --color-paw-red-light: #fbe1dc;
+
+  --color-paw-blue: #3a6ea5;
+  --color-paw-blue-light: #e1ecf7;
+
+  --color-paw-yellow: #e0a92f;
+  --color-paw-yellow-light: #fbefd6;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-cream: var(--color-cream);
+  --color-cream-dark: var(--color-cream-dark);
+  --color-bark: var(--color-bark);
+  --color-bark-soft: var(--color-bark-soft);
+  --color-paw-orange: var(--color-paw-orange);
+  --color-paw-orange-dark: var(--color-paw-orange-dark);
+  --color-paw-orange-light: var(--color-paw-orange-light);
+  --color-paw-green: var(--color-paw-green);
+  --color-paw-green-dark: var(--color-paw-green-dark);
+  --color-paw-green-light: var(--color-paw-green-light);
+  --color-paw-red: var(--color-paw-red);
+  --color-paw-red-light: var(--color-paw-red-light);
+  --color-paw-blue: var(--color-paw-blue);
+  --color-paw-blue-light: var(--color-paw-blue-light);
+  --color-paw-yellow: var(--color-paw-yellow);
+  --color-paw-yellow-light: var(--color-paw-yellow-light);
+  --font-sans: var(--font-sans);
+  --font-display: var(--font-display);
 }
 
 body {
-  background: var(--background);
+  background:
+    radial-gradient(circle at 100% 0%, rgba(226, 119, 46, 0.06), transparent 40%),
+    radial-gradient(circle at 0% 100%, rgba(47, 79, 63, 0.05), transparent 45%),
+    var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+}
+
+.shadow-soft {
+  box-shadow: 0 1px 2px rgba(43, 33, 26, 0.04), 0 8px 24px -8px rgba(43, 33, 26, 0.12);
+}
+
+.shadow-soft-lg {
+  box-shadow: 0 2px 4px rgba(43, 33, 26, 0.04), 0 16px 40px -12px rgba(43, 33, 26, 0.16);
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-cream-dark);
+  border-radius: 999px;
 }
