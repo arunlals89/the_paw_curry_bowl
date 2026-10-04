@@ -1,15 +1,22 @@
 "use client";
 
-import { RoleScreen } from "@/components/app/RoleScreen";
-import { ADMIN_ANALYTICS, ADMIN_CLIENTS } from "@/components/app/demo-data";
+import Link from "next/link";
 
-export default function AdminDashboard() {
-  const { todayRevenue, revenueChangePct, activeOrders, activeSubscriptions, driverPerformance, revenueLast7Days } =
+import { AdminShell } from "@/components/app/AdminShell";
+import { StatusPill } from "@/components/app/StatusPill";
+import { ADMIN_ANALYTICS, ADMIN_CLIENTS, KITCHEN_TICKETS, RAW_INVENTORY } from "@/components/app/demo-data";
+
+export default function AdminOverviewScreen() {
+  const { todayRevenue, revenueChangePct, activeOrders, activeSubscriptions, revenueLast7Days } =
     ADMIN_ANALYTICS;
   const maxRevenue = Math.max(...revenueLast7Days);
 
+  const recentTickets = KITCHEN_TICKETS.slice(0, 3);
+  const lowStock = RAW_INVENTORY.filter((item) => item.stockKg < item.reorderThresholdKg);
+  const activeClients = ADMIN_CLIENTS.filter((c) => c.status === "active").length;
+
   return (
-    <RoleScreen title="Overview" subtitle="Fleet-wide analytics">
+    <AdminShell title="Overview" subtitle="Fleet-wide snapshot">
       <div className="flex flex-col gap-5">
         <div className="grid grid-cols-2 gap-3">
           <div className="rounded-2xl bg-white p-4 shadow-soft">
@@ -22,9 +29,17 @@ export default function AdminDashboard() {
             <p className="font-display text-2xl text-bark">{activeOrders}</p>
             <p className="text-xs text-bark-soft">across all kitchens</p>
           </div>
-          <div className="col-span-2 rounded-2xl bg-white p-4 shadow-soft">
-            <p className="text-xs text-bark-soft">Active subscriptions</p>
+          <div className="rounded-2xl bg-white p-4 shadow-soft">
+            <p className="text-xs text-bark-soft">Subscriptions</p>
             <p className="font-display text-2xl text-bark">{activeSubscriptions}</p>
+            <p className="text-xs text-bark-soft">{activeClients} active clients shown</p>
+          </div>
+          <div className="rounded-2xl bg-white p-4 shadow-soft">
+            <p className="text-xs text-bark-soft">Low stock items</p>
+            <p className="font-display text-2xl text-bark">{lowStock.length}</p>
+            <Link href="/app/admin/stock" className="text-xs font-semibold text-paw-orange-dark">
+              Review stock →
+            </Link>
           </div>
         </div>
 
@@ -44,50 +59,37 @@ export default function AdminDashboard() {
         </div>
 
         <div className="rounded-2xl bg-white p-4 shadow-soft">
-          <p className="mb-3 text-sm font-bold text-bark">Driver performance</p>
-          <div className="flex flex-col gap-3">
-            {driverPerformance.map((driver) => (
-              <div key={driver.name} className="flex flex-col gap-1">
-                <div className="flex items-center justify-between text-xs">
-                  <span className="font-semibold text-bark">{driver.name}</span>
-                  <span className="text-bark-soft">{driver.onTimePct}% on-time</span>
+          <div className="mb-3 flex items-center justify-between">
+            <p className="text-sm font-bold text-bark">Recent orders</p>
+            <Link href="/app/admin/orders" className="text-xs font-semibold text-paw-orange-dark">
+              View all →
+            </Link>
+          </div>
+          <div className="flex flex-col divide-y divide-black/5">
+            {recentTickets.map((ticket) => (
+              <div key={ticket.id} className="flex items-center justify-between py-2.5">
+                <div>
+                  <p className="text-sm font-semibold text-bark">
+                    {ticket.petName} · {ticket.clientName}
+                  </p>
+                  <p className="text-xs text-bark-soft">{ticket.planName}</p>
                 </div>
-                <div className="h-1.5 w-full rounded-full bg-black/5">
-                  <div
-                    className="h-1.5 rounded-full bg-paw-green"
-                    style={{ width: `${driver.onTimePct}%` }}
-                  />
-                </div>
+                <StatusPill status={ticket.status} />
               </div>
             ))}
           </div>
         </div>
 
         <div className="rounded-2xl bg-white p-4 shadow-soft">
-          <p className="mb-3 text-sm font-bold text-bark">Clients</p>
-          <div className="flex flex-col divide-y divide-black/5">
-            {ADMIN_CLIENTS.map((client) => (
-              <div key={client.name} className="flex items-center justify-between py-2.5">
-                <div>
-                  <p className="text-sm font-semibold text-bark">{client.name}</p>
-                  <p className="text-xs text-bark-soft">
-                    {client.pets} pet{client.pets > 1 ? "s" : ""} · {client.plan}
-                  </p>
-                </div>
-                <span
-                  className={`rounded-full px-2.5 py-1 text-[10px] font-bold uppercase ${
-                    client.status === "active"
-                      ? "bg-paw-green-light text-paw-green-dark"
-                      : "bg-black/5 text-bark-soft"
-                  }`}
-                >
-                  {client.status}
-                </span>
-              </div>
-            ))}
+          <div className="mb-1 flex items-center justify-between">
+            <p className="text-sm font-bold text-bark">Need a deeper look?</p>
           </div>
+          <p className="text-xs text-bark-soft">
+            Use the tabs below for full order history, the client roster, driver fleet performance,
+            and raw ingredient stock.
+          </p>
         </div>
       </div>
-    </RoleScreen>
+    </AdminShell>
   );
 }
