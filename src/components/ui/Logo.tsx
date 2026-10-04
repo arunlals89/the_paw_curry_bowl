@@ -1,10 +1,11 @@
 import Image from "next/image";
+import { basePath } from "@/lib/base-path";
 
 export function Logo({ size = 40, withWordmark = true }: { size?: number; withWordmark?: boolean }) {
   return (
     <div className="flex items-center gap-2.5">
       <Image
-        src="/brand/logo.jpg"
+        src={`${basePath}/brand/logo.jpg`}
         alt="The Paw Curry Bowl"
         width={size}
         height={size}
