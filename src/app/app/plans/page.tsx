@@ -1,7 +1,6 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
 
 import { Button } from "@/components/app/Button";
 import { TabScreen } from "@/components/app/Screen";
@@ -10,8 +9,7 @@ import { useAppState } from "@/components/app/state";
 
 export default function PlansScreen() {
   const router = useRouter();
-  const { pets, subscriptions, setSubscriptionStatus } = useAppState();
-  const [skippedId, setSkippedId] = useState<string | null>(null);
+  const { pets, subscriptions, setSubscriptionStatus, toggleSkipTomorrow } = useAppState();
 
   return (
     <TabScreen>
@@ -27,7 +25,6 @@ export default function PlansScreen() {
           subscriptions.map((sub) => {
             const pet = pets.find((item) => item.id === sub.petId);
             const plan = BASE_PLANS.find((item) => item.id === sub.planId);
-            const skipped = skippedId === sub.id;
             return (
               <div key={sub.id} className="flex flex-col gap-3 rounded-2xl bg-white p-5 shadow-soft">
                 <div className="flex items-center justify-between">
@@ -37,7 +34,7 @@ export default function PlansScreen() {
                 <p className="text-sm text-bark-soft">
                   {plan?.name} · {sub.frequency} · ₹{sub.dailyPrice.toFixed(0)}/day
                 </p>
-                {skipped ? (
+                {sub.skippedTomorrow ? (
                   <p className="text-xs font-semibold text-paw-green-dark">
                     Tomorrow&apos;s bowl is skipped.
                   </p>
@@ -45,11 +42,11 @@ export default function PlansScreen() {
                 <div className="flex gap-2">
                   <div className="flex-1">
                     <Button
-                      variant="secondary"
-                      onClick={() => setSkippedId(sub.id)}
+                      variant={sub.skippedTomorrow ? "ghost" : "secondary"}
+                      onClick={() => toggleSkipTomorrow(sub.id)}
                       disabled={sub.status !== "active"}
                     >
-                      Skip tomorrow
+                      {sub.skippedTomorrow ? "Cancel skip" : "Skip tomorrow"}
                     </Button>
                   </div>
                   <div className="flex-1">

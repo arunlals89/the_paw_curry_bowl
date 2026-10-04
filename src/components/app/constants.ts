@@ -14,6 +14,14 @@ export const DEMO_PHONE = DEMO_ACCOUNTS[0].phone;
 
 export type ActivityLevel = "low" | "moderate" | "high";
 
+export const ACTIVITY_LEVELS: { value: ActivityLevel; label: string; blurb: string }[] = [
+  { value: "low", label: "Low", blurb: "Mostly naps and short walks" },
+  { value: "moderate", label: "Moderate", blurb: "Daily walks and some play" },
+  { value: "high", label: "High", blurb: "Runs, hikes, lots of energy" },
+];
+
+export const COMMON_ALLERGIES = ["Chicken", "Beef", "Peas", "Dairy", "Grain", "Fish"];
+
 export type Pet = {
   id: string;
   name: string;
@@ -78,6 +86,7 @@ export type Subscription = {
   dailyPrice: number;
   status: SubscriptionStatus;
   todayStatus: FulfillmentStatus;
+  skippedTomorrow: boolean;
 };
 
 export type Profile = {

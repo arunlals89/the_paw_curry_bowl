@@ -15,6 +15,7 @@ export default function CustomizePlanScreen() {
 
   const [selectedPlan, setSelectedPlan] = useState<BasePlan>(BASE_PLANS[0]);
   const [selectedPetId, setSelectedPetId] = useState<string | null>(pets[0]?.id ?? null);
+  const selectedPet = pets.find((pet) => pet.id === selectedPetId);
   const [chickenG, setChickenG] = useState(BASE_PLANS[0].defaultChickenG);
   const [veggieG, setVeggieG] = useState(BASE_PLANS[0].defaultVeggieG);
   const [riceG, setRiceG] = useState(BASE_PLANS[0].defaultRiceG);
@@ -84,6 +85,22 @@ export default function CustomizePlanScreen() {
               ))}
             </div>
           )}
+          {selectedPet && selectedPet.allergies.length > 0 ? (
+            <div className="flex flex-wrap items-center gap-1.5 rounded-xl bg-paw-red-light/60 px-3 py-2">
+              <span className="text-xs font-semibold text-paw-red">
+                {selectedPet.name} is allergic to:
+              </span>
+              {selectedPet.allergies.map((allergy) => (
+                <span
+                  key={allergy}
+                  className="rounded-full bg-white px-2 py-0.5 text-[10px] font-bold uppercase text-paw-red"
+                >
+                  {allergy}
+                </span>
+              ))}
+              <span className="text-xs text-paw-red/80">— excluded automatically from the kitchen</span>
+            </div>
+          ) : null}
         </div>
 
         <div className="flex flex-col gap-2">

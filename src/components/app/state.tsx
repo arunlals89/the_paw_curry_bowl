@@ -34,8 +34,12 @@ type AppContextValue = AppState & {
   signIn: (phone: string) => void;
   completeProfile: (data: { fullName: string; address: string }) => void;
   addPet: (pet: Omit<Pet, "id">) => void;
-  addSubscription: (sub: Omit<Subscription, "id" | "todayStatus">) => void;
+  updatePet: (id: string, updates: Partial<Omit<Pet, "id">>) => void;
+  removePet: (id: string) => void;
+  addSubscription: (sub: Omit<Subscription, "id" | "todayStatus" | "skippedTomorrow">) => void;
   setSubscriptionStatus: (id: string, status: SubscriptionStatus) => void;
+  toggleSkipTomorrow: (id: string) => void;
+  addFunds: (amount: number) => void;
   signOut: () => void;
 };
 
@@ -94,15 +98,33 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
     }));
   }, []);
 
-  const addSubscription = useCallback((sub: Omit<Subscription, "id" | "todayStatus">) => {
+  const updatePet = useCallback((id: string, updates: Partial<Omit<Pet, "id">>) => {
     setState((prev) => ({
       ...prev,
-      subscriptions: [
-        ...prev.subscriptions,
-        { ...sub, id: `sub-${Date.now()}`, todayStatus: "PREPPING" },
-      ],
+      pets: prev.pets.map((pet) => (pet.id === id ? { ...pet, ...updates } : pet)),
     }));
   }, []);
+
+  const removePet = useCallback((id: string) => {
+    setState((prev) => ({
+      ...prev,
+      pets: prev.pets.filter((pet) => pet.id !== id),
+      subscriptions: prev.subscriptions.filter((sub) => sub.petId !== id),
+    }));
+  }, []);
+
+  const addSubscription = useCallback(
+    (sub: Omit<Subscription, "id" | "todayStatus" | "skippedTomorrow">) => {
+      setState((prev) => ({
+        ...prev,
+        subscriptions: [
+          ...prev.subscriptions,
+          { ...sub, id: `sub-${Date.now()}`, todayStatus: "PREPPING", skippedTomorrow: false },
+        ],
+      }));
+    },
+    []
+  );
 
   const setSubscriptionStatus = useCallback((id: string, status: SubscriptionStatus) => {
     setState((prev) => ({
@@ -110,6 +132,24 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
       subscriptions: prev.subscriptions.map((sub) =>
         sub.id === id ? { ...sub, status } : sub
       ),
+    }));
+  }, []);
+
+  const toggleSkipTomorrow = useCallback((id: string) => {
+    setState((prev) => ({
+      ...prev,
+      subscriptions: prev.subscriptions.map((sub) =>
+        sub.id === id ? { ...sub, skippedTomorrow: !sub.skippedTomorrow } : sub
+      ),
+    }));
+  }, []);
+
+  const addFunds = useCallback((amount: number) => {
+    setState((prev) => ({
+      ...prev,
+      profile: prev.profile
+        ? { ...prev.profile, walletBalance: prev.profile.walletBalance + amount }
+        : prev.profile,
     }));
   }, []);
 
@@ -123,11 +163,27 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
       signIn,
       completeProfile,
       addPet,
+      updatePet,
+      removePet,
       addSubscription,
       setSubscriptionStatus,
+      toggleSkipTomorrow,
+      addFunds,
       signOut,
     }),
-    [state, signIn, completeProfile, addPet, addSubscription, setSubscriptionStatus, signOut]
+    [
+      state,
+      signIn,
+      completeProfile,
+      addPet,
+      updatePet,
+      removePet,
+      addSubscription,
+      setSubscriptionStatus,
+      toggleSkipTomorrow,
+      addFunds,
+      signOut,
+    ]
   );
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

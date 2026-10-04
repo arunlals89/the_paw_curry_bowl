@@ -126,3 +126,17 @@ body {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+@keyframes paw-flash {
+  0%, 100% {
+    background-color: var(--color-paw-red-light);
+    color: var(--color-paw-red);
+  }
+  50% {
+    background-color: var(--color-paw-red);
+    color: white;
+  }
+}
+.allergy-flash {
+  animation: paw-flash 1.6s ease-in-out infinite;
+}

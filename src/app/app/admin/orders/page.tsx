@@ -83,7 +83,7 @@ export default function AdminOrdersScreen() {
                     {ticket.exclusions.map((item) => (
                       <span
                         key={item}
-                        className="rounded-full bg-paw-red-light px-2 py-0.5 text-[10px] font-bold uppercase text-paw-red"
+                        className="allergy-flash rounded-full px-2 py-0.5 text-[10px] font-bold uppercase"
                       >
                         No {item}
                       </span>

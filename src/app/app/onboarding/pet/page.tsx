@@ -9,16 +9,9 @@ import { Screen } from "@/components/app/Screen";
 import { StepHeader } from "@/components/app/StepHeader";
 import { TextField } from "@/components/app/TextField";
 import { CheckIcon } from "@/components/app/icons";
-import { type ActivityLevel } from "@/components/app/constants";
+import { ACTIVITY_LEVELS, COMMON_ALLERGIES, type ActivityLevel } from "@/components/app/constants";
 import { useAppState } from "@/components/app/state";
 
-const ACTIVITY_LEVELS: { value: ActivityLevel; label: string; blurb: string }[] = [
-  { value: "low", label: "Low", blurb: "Mostly naps and short walks" },
-  { value: "moderate", label: "Moderate", blurb: "Daily walks and some play" },
-  { value: "high", label: "High", blurb: "Runs, hikes, lots of energy" },
-];
-
-const COMMON_ALLERGIES = ["Chicken", "Beef", "Peas", "Dairy", "Grain", "Fish"];
 const TOTAL_STEPS = 4;
 
 export default function PetOnboardingScreen() {

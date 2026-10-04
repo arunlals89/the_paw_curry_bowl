@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 import { Button } from "@/components/app/Button";
 import { RoleTabShell } from "@/components/app/RoleTabShell";
@@ -15,18 +15,30 @@ const STATUS_COPY: Record<PurchaseOrder["status"], { label: string; className: s
 
 export default function SupplierDashboard() {
   const [orders, setOrders] = useState(PURCHASE_ORDERS);
+  const [fileNames, setFileNames] = useState<Record<string, string>>({});
   const [toast, setToast] = useState<string | null>(null);
+  const pendingOrderId = useRef<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const uploadInvoice = (id: string) => {
-    setOrders((prev) =>
-      prev.map((order) => (order.id === id ? { ...order, status: "delivered" } : order))
-    );
-    setToast("Invoice uploaded (demo) ✓");
-    setTimeout(() => setToast(null), 2000);
+  const startUpload = (id: string) => {
+    pendingOrderId.current = id;
+    fileInputRef.current?.click();
+  };
+
+  const onFileSelected = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    const id = pendingOrderId.current;
+    if (!file || !id) return;
+    setFileNames((prev) => ({ ...prev, [id]: file.name }));
+    setOrders((prev) => prev.map((order) => (order.id === id ? { ...order, status: "delivered" } : order)));
+    setToast(`Uploaded ${file.name} ✓`);
+    setTimeout(() => setToast(null), 2500);
+    e.target.value = "";
   };
 
   return (
     <RoleTabShell title="Purchase orders" subtitle="Assigned to your account" tabs={SUPPLIER_TABS}>
+      <input ref={fileInputRef} type="file" accept="image/*,.pdf" onChange={onFileSelected} className="hidden" />
       <div className="flex flex-col gap-3">
         {toast ? (
           <div className="rounded-xl bg-paw-green-light px-4 py-2.5 text-sm font-semibold text-paw-green-dark">
@@ -42,13 +54,14 @@ export default function SupplierDashboard() {
                 <span className="font-mono text-[11px] text-bark-soft/60">{order.id}</span>
               </div>
               <p className="text-sm text-bark-soft">{order.quantityKg}kg · {order.dueDate}</p>
-              <span
-                className={`w-fit rounded-full px-3 py-1 text-xs font-bold ${copy.className}`}
-              >
+              <span className={`w-fit rounded-full px-3 py-1 text-xs font-bold ${copy.className}`}>
                 {copy.label}
               </span>
+              {fileNames[order.id] ? (
+                <p className="truncate text-xs text-bark-soft">📎 {fileNames[order.id]}</p>
+              ) : null}
               {order.status === "invoice_pending" ? (
-                <Button variant="secondary" onClick={() => uploadInvoice(order.id)}>
+                <Button variant="secondary" onClick={() => startUpload(order.id)}>
                   Upload invoice
                 </Button>
               ) : null}
