@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
+import { BreedField } from "@/components/app/BreedField";
 import { Button } from "@/components/app/Button";
 import { Screen } from "@/components/app/Screen";
 import { StepHeader } from "@/components/app/StepHeader";
@@ -94,12 +95,7 @@ export default function PetOnboardingScreen() {
           {step === 1 ? (
             <div className="flex flex-col gap-4">
               <TextField label="Pet name" placeholder="Biscuit" value={name} onChange={(e) => setName(e.target.value)} />
-              <TextField
-                label="Breed (optional)"
-                placeholder="Golden Retriever"
-                value={breed}
-                onChange={(e) => setBreed(e.target.value)}
-              />
+              <BreedField value={breed} onChange={setBreed} />
             </div>
           ) : null}
 
