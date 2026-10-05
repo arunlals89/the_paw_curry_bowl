@@ -106,7 +106,7 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
     try {
       const raw = window.sessionStorage.getItem(STORAGE_KEY);
       // eslint-disable-next-line react-hooks/set-state-in-effect -- one-time hydration from sessionStorage on mount
-      if (raw) setState(JSON.parse(raw));
+      if (raw) setState((prev) => ({ ...prev, ...JSON.parse(raw) }));
     } catch {
       // ignore corrupt storage
     }
