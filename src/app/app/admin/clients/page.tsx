@@ -5,9 +5,10 @@ import { useMemo, useState } from "react";
 import { AdminShell } from "@/components/app/AdminShell";
 import { Button } from "@/components/app/Button";
 import { TextField } from "@/components/app/TextField";
-import { PhoneIcon, SearchIcon } from "@/components/app/icons";
+import { PhoneIcon, SearchIcon, WhatsAppIcon } from "@/components/app/icons";
 import { useAppState } from "@/components/app/state";
 import type { SubscriptionStatus } from "@/components/app/constants";
+import { whatsappLink } from "@/lib/whatsapp";
 
 const STATUS_STYLES: Record<string, string> = {
   active: "bg-paw-green-light text-paw-green-dark",
@@ -121,6 +122,19 @@ export default function AdminClientsScreen() {
                       </span>
                       <span className="text-bark-soft">Client for {client.sinceMonths}mo</span>
                     </div>
+                    <a
+                      href={whatsappLink(
+                        client.phone,
+                        `Hi ${client.name.split(" ")[0]}, this is The Paw Curry Bowl 🐾`
+                      )}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={(e) => e.stopPropagation()}
+                      className="flex items-center justify-center gap-2 rounded-xl bg-paw-green-light px-3 py-2.5 text-xs font-bold text-paw-green-dark"
+                    >
+                      <WhatsAppIcon size={15} />
+                      Message on WhatsApp
+                    </a>
                     <div className="flex items-center justify-between rounded-xl bg-paw-orange-light/40 px-3 py-2">
                       <span className="text-xs text-bark-soft">Wallet balance</span>
                       <span className="text-sm font-bold text-paw-orange-dark">₹{client.walletBalance}</span>

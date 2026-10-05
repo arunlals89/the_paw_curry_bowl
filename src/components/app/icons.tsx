@@ -156,6 +156,23 @@ export function PhoneIcon({ size = 16, className }: IconProps) {
   );
 }
 
+export function WhatsAppIcon({ size = 16, className }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className={className}>
+      <path
+        d="M12 3.5a8.4 8.4 0 0 0-7.2 12.7L4 20.5l4.4-1.2A8.4 8.4 0 1 0 12 3.5Z"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M8.8 8.3c.2-.4.4-.4.6-.4h.5c.2 0 .4 0 .5.4l.6 1.5c.1.2 0 .4-.1.5l-.5.6c-.1.2-.1.3 0 .5a5.6 5.6 0 0 0 2.4 2.4c.2.1.3.1.5 0l.6-.5c.1-.1.3-.2.5-.1l1.5.6c.4.1.4.3.4.5v.5c0 .2 0 .4-.4.6-.4.3-1.6.8-2.7.2a8 8 0 0 1-3.8-3.8c-.6-1.1-.1-2.3.2-2.7Z"
+        fill="currentColor"
+      />
+    </svg>
+  );
+}
+
 export function LocationIcon({ size = 18, className }: IconProps) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className={className}>
