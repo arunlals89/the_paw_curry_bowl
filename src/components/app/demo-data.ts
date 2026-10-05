@@ -1,4 +1,11 @@
-import type { FulfillmentStatus } from "./constants";
+import type {
+  AdminClient,
+  DriverProfile,
+  FleetDriver,
+  FulfillmentStatus,
+  SupplierCatalogItem,
+  SupplierProfile,
+} from "./constants";
 
 export type KitchenTicket = {
   id: string;
@@ -59,9 +66,9 @@ export const PURCHASE_ORDERS: PurchaseOrder[] = [
 ];
 
 export const RAW_INVENTORY = [
-  { itemName: "Chicken mince", stockKg: 32, reorderThresholdKg: 40 },
-  { itemName: "Mixed vegetables", stockKg: 18, reorderThresholdKg: 25 },
-  { itemName: "Rice", stockKg: 54, reorderThresholdKg: 30 },
+  { itemName: "Chicken mince", stockKg: 32, reorderThresholdKg: 40, costPerKg: 220 },
+  { itemName: "Mixed vegetables", stockKg: 18, reorderThresholdKg: 25, costPerKg: 70 },
+  { itemName: "Rice", stockKg: 54, reorderThresholdKg: 30, costPerKg: 55 },
 ];
 
 export const ADMIN_ANALYTICS = {
@@ -77,8 +84,9 @@ export const ADMIN_ANALYTICS = {
   revenueLast7Days: [12800, 14200, 13100, 15600, 16800, 17200, 18400],
 };
 
-export const ADMIN_CLIENTS = [
+export const ADMIN_CLIENTS: AdminClient[] = [
   {
+    id: "client-1",
     name: "Meera Krishnan",
     phone: "+91 98765 43210",
     plan: "Powerpaws",
@@ -88,6 +96,7 @@ export const ADMIN_CLIENTS = [
     pets: [{ name: "Bruno", breed: "Labrador", allergies: ["Peas"] }],
   },
   {
+    id: "client-2",
     name: "Arjun Varma",
     phone: "+91 98765 11234",
     plan: "Big Dawg",
@@ -100,6 +109,7 @@ export const ADMIN_CLIENTS = [
     ],
   },
   {
+    id: "client-3",
     name: "Divya Shankar",
     phone: "+91 90000 22334",
     plan: "Pawrfect",
@@ -109,6 +119,7 @@ export const ADMIN_CLIENTS = [
     pets: [{ name: "Coco", breed: "Shih Tzu", allergies: ["Grain"] }],
   },
   {
+    id: "client-4",
     name: "Karthik Iyer",
     phone: "+91 98400 55667",
     plan: "Powerpaws",
@@ -118,6 +129,7 @@ export const ADMIN_CLIENTS = [
     pets: [{ name: "Max", breed: "Beagle", allergies: [] }],
   },
   {
+    id: "client-5",
     name: "Sanjana Rao",
     phone: "+91 93456 77889",
     plan: "Pawrfect",
@@ -127,6 +139,7 @@ export const ADMIN_CLIENTS = [
     pets: [{ name: "Luna", breed: "Indie", allergies: ["Dairy", "Fish"] }],
   },
   {
+    id: "client-6",
     name: "Vikram Nair",
     phone: "+91 97890 12345",
     plan: "Big Dawg",
@@ -136,6 +149,7 @@ export const ADMIN_CLIENTS = [
     pets: [{ name: "Rocky", breed: "German Shepherd", allergies: [] }],
   },
   {
+    id: "client-7",
     name: "Priya Menon",
     phone: "+91 96543 21098",
     plan: "Powerpaws",
@@ -148,6 +162,7 @@ export const ADMIN_CLIENTS = [
     ],
   },
   {
+    id: "client-8",
     name: "Rahul Desai",
     phone: "+91 99887 66554",
     plan: "Pawrfect",
@@ -157,6 +172,7 @@ export const ADMIN_CLIENTS = [
     pets: [{ name: "Tommy", breed: "Indie", allergies: [] }],
   },
   {
+    id: "client-9",
     name: "Anita George",
     phone: "+91 90123 45678",
     plan: "Big Dawg",
@@ -167,13 +183,13 @@ export const ADMIN_CLIENTS = [
   },
 ];
 
-export const ADMIN_DRIVERS = [
-  { name: "Vikram S.", vehicle: "TN 37 AB 4521 · Scooter", stopsToday: 2, onTimePct: 98, phone: "+91 98111 22334" },
-  { name: "Suresh Pillai", vehicle: "TN 37 CD 7788 · Bike", stopsToday: 2, onTimePct: 94, phone: "+91 98222 33445" },
-  { name: "Lakshmi N.", vehicle: "TN 37 EF 9012 · Scooter", stopsToday: 2, onTimePct: 100, phone: "+91 98333 44556" },
+export const ADMIN_DRIVERS: FleetDriver[] = [
+  { id: "driver-1", name: "Vikram S.", vehicle: "TN 37 AB 4521 · Scooter", stopsToday: 2, onTimePct: 98, phone: "+91 98111 22334" },
+  { id: "driver-2", name: "Suresh Pillai", vehicle: "TN 37 CD 7788 · Bike", stopsToday: 2, onTimePct: 94, phone: "+91 98222 33445" },
+  { id: "driver-3", name: "Lakshmi N.", vehicle: "TN 37 EF 9012 · Scooter", stopsToday: 2, onTimePct: 100, phone: "+91 98333 44556" },
 ];
 
-export const DRIVER_PROFILE = {
+export const DRIVER_PROFILE: DriverProfile = {
   name: "Vikram S.",
   phone: "+91 98111 22334",
   vehicle: "TN 37 AB 4521",
@@ -214,7 +230,7 @@ export const DRIVER_HISTORY: PastDelivery[] = [
   { date: "2 days ago", clientName: "Sanjana Rao", petName: "Luna", earnings: 60 },
 ];
 
-export const SUPPLIER_PROFILE = {
+export const SUPPLIER_PROFILE: SupplierProfile = {
   businessName: "Coimbatore Fresh Farms",
   contactName: "Ganesh Murthy",
   phone: "+91 90000 44556",
@@ -238,8 +254,8 @@ export const SUPPLIER_INVOICES: SupplierInvoice[] = [
   { id: "INV-501", poId: "PO-2019", amount: 6400, status: "paid", date: "1 week ago" },
 ];
 
-export const SUPPLIER_CATALOG = [
-  { itemName: "Chicken mince", ratePerKg: 220, unit: "kg", leadTimeDays: 1 },
-  { itemName: "Mixed vegetables", ratePerKg: 70, unit: "kg", leadTimeDays: 1 },
-  { itemName: "Rice (raw)", ratePerKg: 55, unit: "kg", leadTimeDays: 2 },
+export const SUPPLIER_CATALOG: SupplierCatalogItem[] = [
+  { id: "catalog-1", itemName: "Chicken mince", ratePerKg: 220, unit: "kg", leadTimeDays: 1 },
+  { id: "catalog-2", itemName: "Mixed vegetables", ratePerKg: 70, unit: "kg", leadTimeDays: 1 },
+  { id: "catalog-3", itemName: "Rice (raw)", ratePerKg: 55, unit: "kg", leadTimeDays: 2 },
 ];

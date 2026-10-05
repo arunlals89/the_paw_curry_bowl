@@ -79,7 +79,6 @@ export type Subscription = {
   id: string;
   petId: string;
   planId: string;
-  frequency: "daily" | "weekly";
   customChickenG: number;
   customVeggieG: number;
   customRiceG: number;
@@ -94,4 +93,65 @@ export type Profile = {
   phone: string;
   address: string;
   walletBalance: number;
+};
+
+export type RawInventoryItem = {
+  itemName: string;
+  stockKg: number;
+  reorderThresholdKg: number;
+  costPerKg: number;
+};
+
+export type InventoryUsageEntry = {
+  id: string;
+  itemName: string;
+  quantityKg: number;
+  date: string;
+};
+
+export type AdminClient = {
+  id: string;
+  name: string;
+  phone: string;
+  plan: string;
+  status: SubscriptionStatus;
+  walletBalance: number;
+  sinceMonths: number;
+  pets: { name: string; breed: string; allergies: string[] }[];
+};
+
+export type FleetDriver = {
+  id: string;
+  name: string;
+  vehicle: string;
+  stopsToday: number;
+  onTimePct: number;
+  phone: string;
+};
+
+export type SupplierCatalogItem = {
+  id: string;
+  itemName: string;
+  ratePerKg: number;
+  unit: string;
+  leadTimeDays: number;
+};
+
+export type DriverProfile = {
+  name: string;
+  phone: string;
+  vehicle: string;
+  vehicleType: string;
+  rating: number;
+  deliveriesCompleted: number;
+  joinedMonthsAgo: number;
+};
+
+export type SupplierProfile = {
+  businessName: string;
+  contactName: string;
+  phone: string;
+  gstin: string;
+  bankAccount: string;
+  itemsSupplied: string[];
 };

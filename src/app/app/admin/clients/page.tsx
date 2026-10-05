@@ -3,8 +3,11 @@
 import { useMemo, useState } from "react";
 
 import { AdminShell } from "@/components/app/AdminShell";
+import { Button } from "@/components/app/Button";
+import { TextField } from "@/components/app/TextField";
 import { PhoneIcon, SearchIcon } from "@/components/app/icons";
-import { ADMIN_CLIENTS } from "@/components/app/demo-data";
+import { useAppState } from "@/components/app/state";
+import type { SubscriptionStatus } from "@/components/app/constants";
 
 const STATUS_STYLES: Record<string, string> = {
   active: "bg-paw-green-light text-paw-green-dark",
@@ -12,18 +15,70 @@ const STATUS_STYLES: Record<string, string> = {
   cancelled: "bg-black/5 text-bark-soft",
 };
 
+const STATUS_OPTIONS: SubscriptionStatus[] = ["active", "paused", "cancelled"];
+
 export default function AdminClientsScreen() {
+  const { clients, addClient, updateClient, removeClient } = useAppState();
   const [query, setQuery] = useState("");
   const [expanded, setExpanded] = useState<string | null>(null);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editName, setEditName] = useState("");
+  const [editPhone, setEditPhone] = useState("");
+  const [editPlan, setEditPlan] = useState("");
+  const [editStatus, setEditStatus] = useState<SubscriptionStatus>("active");
+  const [editWallet, setEditWallet] = useState("");
+  const [creating, setCreating] = useState(false);
+  const [newName, setNewName] = useState("");
+  const [newPhone, setNewPhone] = useState("");
+  const [newPlan, setNewPlan] = useState("");
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
-    if (!q) return ADMIN_CLIENTS;
-    return ADMIN_CLIENTS.filter((client) => client.name.toLowerCase().includes(q));
-  }, [query]);
+    if (!q) return clients;
+    return clients.filter((client) => client.name.toLowerCase().includes(q));
+  }, [clients, query]);
+
+  const startEdit = (id: string) => {
+    const client = clients.find((c) => c.id === id);
+    if (!client) return;
+    setEditingId(id);
+    setEditName(client.name);
+    setEditPhone(client.phone);
+    setEditPlan(client.plan);
+    setEditStatus(client.status);
+    setEditWallet(String(client.walletBalance));
+  };
+
+  const saveEdit = (id: string) => {
+    updateClient(id, {
+      name: editName.trim(),
+      phone: editPhone.trim(),
+      plan: editPlan.trim(),
+      status: editStatus,
+      walletBalance: Number(editWallet) || 0,
+    });
+    setEditingId(null);
+  };
+
+  const submitNewClient = () => {
+    if (!newName.trim()) return;
+    addClient({
+      name: newName.trim(),
+      phone: newPhone.trim(),
+      plan: newPlan.trim() || "Pawrfect",
+      status: "active",
+      walletBalance: 0,
+      sinceMonths: 0,
+      pets: [],
+    });
+    setNewName("");
+    setNewPhone("");
+    setNewPlan("");
+    setCreating(false);
+  };
 
   return (
-    <AdminShell title="Clients" subtitle={`${ADMIN_CLIENTS.length} total`}>
+    <AdminShell title="Clients" subtitle={`${clients.length} total`}>
       <div className="flex flex-col gap-4">
         <div className="flex items-center gap-2 rounded-xl border border-black/10 bg-white px-3 py-2.5">
           <SearchIcon size={16} className="text-bark-soft/60" />
@@ -37,18 +92,18 @@ export default function AdminClientsScreen() {
 
         <div className="flex flex-col gap-2">
           {filtered.map((client) => {
-            const isOpen = expanded === client.name;
+            const isOpen = expanded === client.id;
+            const isEditing = editingId === client.id;
             return (
-              <button
-                key={client.name}
-                onClick={() => setExpanded(isOpen ? null : client.name)}
-                className="flex flex-col gap-2 rounded-2xl bg-white p-4 text-left shadow-soft"
-              >
-                <div className="flex items-center justify-between">
+              <div key={client.id} className="flex flex-col gap-2 rounded-2xl bg-white p-4 shadow-soft">
+                <button
+                  onClick={() => setExpanded(isOpen ? null : client.id)}
+                  className="flex items-center justify-between text-left"
+                >
                   <div>
                     <p className="text-sm font-bold text-bark">{client.name}</p>
                     <p className="text-xs text-bark-soft">
-                      {client.plan} · {client.pets.length} pet{client.pets.length > 1 ? "s" : ""}
+                      {client.plan} · {client.pets.length} pet{client.pets.length === 1 ? "" : "s"}
                     </p>
                   </div>
                   <span
@@ -56,9 +111,9 @@ export default function AdminClientsScreen() {
                   >
                     {client.status}
                   </span>
-                </div>
+                </button>
 
-                {isOpen ? (
+                {isOpen && !isEditing ? (
                   <div className="flex flex-col gap-3 border-t border-black/5 pt-3">
                     <div className="flex items-center justify-between text-xs">
                       <span className="flex items-center gap-1.5 text-bark-soft">
@@ -93,12 +148,84 @@ export default function AdminClientsScreen() {
                         </div>
                       ))}
                     </div>
+                    <div className="flex gap-2">
+                      <div className="flex-1">
+                        <Button variant="secondary" onClick={() => startEdit(client.id)}>
+                          Edit client
+                        </Button>
+                      </div>
+                      <div className="flex-1">
+                        <Button
+                          variant="ghost"
+                          className="text-paw-red"
+                          onClick={() => removeClient(client.id)}
+                        >
+                          Delete client
+                        </Button>
+                      </div>
+                    </div>
                   </div>
                 ) : null}
-              </button>
+
+                {isEditing ? (
+                  <div className="flex flex-col gap-3 border-t border-black/5 pt-3">
+                    <TextField label="Name" value={editName} onChange={(e) => setEditName(e.target.value)} />
+                    <TextField label="Phone" value={editPhone} onChange={(e) => setEditPhone(e.target.value)} />
+                    <div className="grid grid-cols-2 gap-2">
+                      <TextField label="Plan" value={editPlan} onChange={(e) => setEditPlan(e.target.value)} />
+                      <TextField
+                        label="Wallet (₹)"
+                        type="number"
+                        value={editWallet}
+                        onChange={(e) => setEditWallet(e.target.value)}
+                      />
+                    </div>
+                    <div className="flex gap-2">
+                      {STATUS_OPTIONS.map((status) => (
+                        <button
+                          key={status}
+                          onClick={() => setEditStatus(status)}
+                          className={`flex-1 rounded-xl border py-2 text-xs font-semibold capitalize transition ${
+                            editStatus === status
+                              ? "border-paw-orange bg-paw-orange-light text-paw-orange-dark"
+                              : "border-black/10 bg-white text-bark"
+                          }`}
+                        >
+                          {status}
+                        </button>
+                      ))}
+                    </div>
+                    <div className="flex gap-2">
+                      <Button onClick={() => saveEdit(client.id)}>Save</Button>
+                      <Button variant="ghost" onClick={() => setEditingId(null)}>
+                        Cancel
+                      </Button>
+                    </div>
+                  </div>
+                ) : null}
+              </div>
             );
           })}
         </div>
+
+        {creating ? (
+          <div className="flex flex-col gap-3 rounded-2xl bg-white p-4 shadow-soft">
+            <p className="text-sm font-bold text-bark">Add client</p>
+            <TextField label="Name" value={newName} onChange={(e) => setNewName(e.target.value)} />
+            <TextField label="Phone" value={newPhone} onChange={(e) => setNewPhone(e.target.value)} />
+            <TextField label="Plan" value={newPlan} onChange={(e) => setNewPlan(e.target.value)} />
+            <div className="flex gap-2">
+              <Button onClick={submitNewClient}>Add client</Button>
+              <Button variant="ghost" onClick={() => setCreating(false)}>
+                Cancel
+              </Button>
+            </div>
+          </div>
+        ) : (
+          <Button variant="secondary" onClick={() => setCreating(true)}>
+            + Add client
+          </Button>
+        )}
       </div>
     </AdminShell>
   );

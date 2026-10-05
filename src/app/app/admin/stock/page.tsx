@@ -1,7 +1,8 @@
 "use client";
 
 import { AdminShell } from "@/components/app/AdminShell";
-import { PURCHASE_ORDERS, RAW_INVENTORY, type PurchaseOrder } from "@/components/app/demo-data";
+import { InventoryStockPanel } from "@/components/app/InventoryStockPanel";
+import { PURCHASE_ORDERS, type PurchaseOrder } from "@/components/app/demo-data";
 
 const PO_STATUS_COPY: Record<PurchaseOrder["status"], { label: string; className: string }> = {
   awaiting_delivery: { label: "Awaiting delivery", className: "bg-paw-blue-light text-paw-blue" },
@@ -13,30 +14,9 @@ export default function AdminStockScreen() {
   return (
     <AdminShell title="Stock" subtitle="Raw ingredients & purchase orders">
       <div className="flex flex-col gap-5">
-        <div className="rounded-2xl bg-white p-4 shadow-soft">
+        <div>
           <p className="mb-3 text-sm font-bold text-bark">Raw inventory</p>
-          <div className="flex flex-col gap-3">
-            {RAW_INVENTORY.map((item) => {
-              const low = item.stockKg < item.reorderThresholdKg;
-              const pct = Math.min(100, (item.stockKg / (item.reorderThresholdKg * 1.6)) * 100);
-              return (
-                <div key={item.itemName} className="flex flex-col gap-1">
-                  <div className="flex items-center justify-between text-xs">
-                    <span className="font-semibold text-bark">{item.itemName}</span>
-                    <span className={low ? "font-bold text-paw-red" : "text-bark-soft"}>
-                      {item.stockKg}kg {low ? "· reorder" : ""}
-                    </span>
-                  </div>
-                  <div className="h-1.5 w-full rounded-full bg-black/5">
-                    <div
-                      className={`h-1.5 rounded-full ${low ? "bg-paw-red" : "bg-paw-green"}`}
-                      style={{ width: `${pct}%` }}
-                    />
-                  </div>
-                </div>
-              );
-            })}
-          </div>
+          <InventoryStockPanel />
         </div>
 
         <div className="flex flex-col gap-2">

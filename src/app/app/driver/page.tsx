@@ -50,6 +50,7 @@ export default function DriverDashboard() {
 
   const remaining = stops.filter((s) => s.status !== "DELIVERED").length;
   const podStop = stops.find((s) => s.id === podStopId);
+  const nextStop = stops.find((s) => s.status !== "DELIVERED");
 
   if (podStopId && podStop) {
     return (
@@ -102,7 +103,24 @@ export default function DriverDashboard() {
 
   return (
     <RoleTabShell title="Today's route" subtitle={`${remaining} stops remaining`} tabs={DRIVER_TABS}>
-      <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-4">
+        {nextStop ? (
+          <div className="flex flex-col gap-1 rounded-2xl bg-bark p-4 text-white shadow-soft-lg">
+            <span className="text-xs font-bold uppercase tracking-wide text-white/60">
+              Next delivery · Stop {nextStop.sequence} of {stops.length}
+            </span>
+            <p className="text-base font-bold">
+              {nextStop.clientName} · {nextStop.petName}
+            </p>
+            <p className="text-sm text-white/80">{nextStop.address}</p>
+          </div>
+        ) : (
+          <div className="rounded-2xl bg-paw-green-light p-4 text-center text-sm font-semibold text-paw-green-dark">
+            All stops delivered — route complete 🎉
+          </div>
+        )}
+
+        <div className="flex flex-col gap-3">
         {stops.map((stop) => (
           <div key={stop.id} className="flex flex-col gap-2 rounded-2xl bg-white p-4 shadow-soft">
             <div className="flex items-start justify-between">
@@ -143,6 +161,7 @@ export default function DriverDashboard() {
             )}
           </div>
         ))}
+        </div>
       </div>
     </RoleTabShell>
   );

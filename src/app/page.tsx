@@ -48,7 +48,7 @@ export default function LandingPage() {
           <div className="mx-auto grid max-w-6xl items-center gap-10 px-5 py-16 md:grid-cols-2 md:px-8 md:py-24">
             <div>
               <span className="inline-flex items-center gap-2 rounded-full bg-paw-green-light px-3.5 py-1.5 text-xs font-bold text-paw-green-dark">
-                🐾 Now delivering across Bengaluru
+                🐾 Now delivering across Coimbatore
               </span>
               <h1 className="mt-5 font-display text-4xl leading-tight text-bark md:text-5xl">
                 Fresh, home-cooked meals your dog will love.

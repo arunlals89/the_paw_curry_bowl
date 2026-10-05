@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 import { Button } from "@/components/app/Button";
 import { TabScreen } from "@/components/app/Screen";
@@ -9,7 +10,8 @@ import { useAppState } from "@/components/app/state";
 
 export default function PlansScreen() {
   const router = useRouter();
-  const { pets, subscriptions, setSubscriptionStatus, toggleSkipTomorrow } = useAppState();
+  const { pets, subscriptions, setSubscriptionStatus, toggleSkipTomorrow, removeSubscription } = useAppState();
+  const [confirmingDeleteId, setConfirmingDeleteId] = useState<string | null>(null);
 
   return (
     <TabScreen>
@@ -32,7 +34,7 @@ export default function PlansScreen() {
                   <span className="text-xs font-bold uppercase text-bark-soft/60">{sub.status}</span>
                 </div>
                 <p className="text-sm text-bark-soft">
-                  {plan?.name} · {sub.frequency} · ₹{sub.dailyPrice.toFixed(0)}/day
+                  {plan?.name} · Monthly plan · ₹{sub.dailyPrice.toFixed(0)}/day
                 </p>
                 {sub.skippedTomorrow ? (
                   <p className="text-xs font-semibold text-paw-green-dark">
@@ -58,6 +60,28 @@ export default function PlansScreen() {
                     >
                       {sub.status === "active" ? "Pause plan" : "Resume plan"}
                     </Button>
+                  </div>
+                </div>
+                <div className="flex gap-2">
+                  <div className="flex-1">
+                    <Button variant="ghost" onClick={() => router.push(`/app/customize?subId=${sub.id}`)}>
+                      Edit mix
+                    </Button>
+                  </div>
+                  <div className="flex-1">
+                    {confirmingDeleteId === sub.id ? (
+                      <Button variant="dark" onClick={() => removeSubscription(sub.id)}>
+                        Confirm cancel
+                      </Button>
+                    ) : (
+                      <Button
+                        variant="ghost"
+                        className="text-paw-red"
+                        onClick={() => setConfirmingDeleteId(sub.id)}
+                      >
+                        Cancel plan
+                      </Button>
+                    )}
                   </div>
                 </div>
               </div>
