@@ -178,7 +178,7 @@ export default function LandingPage() {
           <div className="flex flex-col items-center gap-5 rounded-3xl bg-paw-green px-8 py-12 text-center shadow-soft-lg">
             <h2 className="font-display text-3xl text-white">Ready to spoil your pup?</h2>
             <p className="max-w-md text-sm text-paw-green-light">
-              Join 300+ Bengaluru pet parents already feeding their dogs fresh, home-cooked meals.
+              Join 300+ Coimbatore pet parents already feeding their dogs fresh, home-cooked meals.
             </p>
             <a href="#get-started" className="rounded-xl bg-white px-7 py-3.5 text-sm font-bold text-paw-green-dark shadow-soft transition hover:bg-cream">
               Start your plan today
@@ -191,7 +191,7 @@ export default function LandingPage() {
         <div className="mx-auto flex max-w-6xl flex-col items-center gap-4 px-5 text-center md:flex-row md:justify-between md:text-left md:px-8">
           <Logo size={32} />
           <p className="text-xs text-bark-soft">
-            © {new Date().getFullYear()} The Paw Curry Bowl. Cooked fresh every morning in Bengaluru.
+            © {new Date().getFullYear()} The Paw Curry Bowl. Cooked fresh every morning in Coimbatore.
           </p>
           <a
             href="https://www.instagram.com/the_paw_curry_bowl"
